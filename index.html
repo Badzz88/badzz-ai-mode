@@ -3,16 +3,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BADZZ AI Chat</title>
+  <title>BADZZ AI TESTING</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #0b1220 0%, #121a2b 100%);
+      background: linear-gradient(135deg, #0b1220, #121a2b, #0b1220);
+      background-size: 300% 300%;
+      animation: bgMove 20s ease infinite;
       color: #e6f0ff;
       margin: 0;
       display: flex;
       flex-direction: column;
       height: 100vh;
+    }
+
+    @keyframes bgMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     header {
@@ -31,6 +39,7 @@
       margin: 0;
       color: #4aa3ff;
       letter-spacing: 1px;
+      animation: fadeSlide 1s ease forwards;
     }
 
     #chat {
@@ -45,7 +54,8 @@
 
     .msg {
       display: flex;
-      animation: fadeIn 0.3s ease;
+      opacity: 0;
+      animation: fadeSlide 0.5s ease forwards;
     }
 
     .msg.user { justify-content: flex-end; }
@@ -59,10 +69,9 @@
       line-height: 1.4;
       box-shadow: 0 4px 12px rgba(0,0,0,0.25);
       backdrop-filter: blur(10px);
-      transition: transform 0.2s ease;
+      transform: scale(0.95);
+      animation: popIn 0.35s ease forwards;
     }
-
-    .bubble:hover { transform: scale(1.02); }
 
     .user .bubble {
       background: linear-gradient(135deg, #1f6feb, #3d8bff);
@@ -84,6 +93,7 @@
       background: rgba(18, 26, 43, 0.9);
       gap: 10px;
       backdrop-filter: blur(8px);
+      animation: fadeSlideUp 0.6s ease forwards;
     }
 
     .row { display: flex; gap: 10px; align-items: center; }
@@ -98,6 +108,10 @@
       color: #e6f0ff;
       font-size: 14px;
       outline: none;
+      transition: box-shadow 0.3s ease;
+    }
+    textarea:focus {
+      box-shadow: 0 0 12px rgba(74,163,255,0.6);
     }
 
     button, label.file-btn {
@@ -108,36 +122,70 @@
       border-radius: 25px;
       cursor: pointer;
       font-weight: bold;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      display: inline-block;
-      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
 
     button:hover, label.file-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 12px rgba(31,111,235,0.6);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 6px 18px rgba(31,111,235,0.6);
     }
 
     button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    input[type=file] {
-      display: none;
-    }
-
+    input[type=file] { display: none; }
     label { font-size: 13px; color: #a8b3c7; }
     .tiny { font-size: 12px; color: #95a3b8; }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(5px); }
+    /* Typing Indicator */
+    .typing {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      padding: 10px 16px;
+      background: rgba(26,35,54,0.8);
+      border-radius: 18px;
+      width: fit-content;
+      margin-left: 6px;
+      animation: fadeSlide 0.3s ease forwards;
+    }
+    .dot {
+      width: 6px;
+      height: 6px;
+      background: #e6f0ff;
+      border-radius: 50%;
+      animation: blink 1.4s infinite;
+    }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes blink {
+      0%, 80%, 100% { opacity: 0.2; }
+      40% { opacity: 1; }
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(15px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>🤖 BADZZ AI — Mode Akurat</h1>
+    <h1>🤖 BADZZ AI — Mode Testing</h1>
     <div style="margin-left:auto; display:flex; gap:10px; align-items:center;">
-      <label class="tiny">Jawaban faktual + sumber terpercaya</label>
+      <label class="tiny">Developer : BadzzMods</label>
     </div>
   </header>
 
@@ -146,12 +194,12 @@
   <div class="composer">
     <div class="row">
       <textarea id="input" rows="2" placeholder="Tulis pesan... (boleh kirim foto juga)"></textarea>
-      <button id="send">🚀 Kirim</button>
+      <button id="send">🚀 Enter</button>
     </div>
     <div class="row">
       <label for="image" class="file-btn">📷 Pilih Foto</label>
       <input type="file" id="image" accept="image/*">
-      <div class="tiny">Tips: gunakan kata kunci jelas, misalnya "Siapa presiden Indonesia sekarang?"</div>
+      <div class="tiny">Note: AI ini ketinggalan zaman, dia masih pake api key gemini flash 5‼️"</div>
     </div>
   </div>
 
@@ -161,10 +209,9 @@
     const sendBtn = document.getElementById('send');
     const imageEl = document.getElementById('image');
 
-    // BADZZ AI Config
-    const GEMINI_API_KEY = "AIzaSyAoJ2F0PrckL1qd2N3i5uC3Glvor29qWBA";
+    // Config
+    const GEMINI_API_KEY = "AIzaSyAoJ2F0PrckL1qd2N3i5uC3Glvor29qWBA"; // Ganti dengan API Key kamu
     const GEMINI_MODEL = "gemini-1.5-flash";
-
     let history = [];
 
     function addMessage(role, text, small=false) {
@@ -177,6 +224,21 @@
       row.appendChild(bubble);
       chatEl.appendChild(row);
       chatEl.scrollTop = chatEl.scrollHeight;
+      return bubble;
+    }
+
+    function showTyping() {
+      const row = document.createElement('div');
+      row.className = 'msg ai';
+      row.id = "typing";
+      row.innerHTML = `<div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+      chatEl.appendChild(row);
+      chatEl.scrollTop = chatEl.scrollHeight;
+    }
+
+    function removeTyping() {
+      const typingEl = document.getElementById("typing");
+      if (typingEl) typingEl.remove();
     }
 
     async function fileToBase64(file) {
@@ -190,12 +252,9 @@
 
     async function callGemini(parts) {
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
-      
       const systemPrompt = {
         role: "user",
-        parts: [{
-          text: "Kamu adalah BADZZ AI dengan akses Google Search. Jawablah dengan data terbaru, faktual, tidak mengarang, sertakan sumber bila ada."
-        }]
+        parts: [{ text: "Kamu adalah BADZZ AI. Jawablah faktual, terbaru, sertakan sumber bila ada." }]
       };
 
       const res = await fetch(url, {
@@ -218,7 +277,6 @@
 
       inputEl.value = '';
       imageEl.value = null;
-
       addMessage('user', text || `[foto: ${file?.name || 'image'}]`);
 
       let parts = [];
@@ -233,17 +291,18 @@
         }
       }
 
-      addMessage('ai', '🔍 BADZZ AI sedang mencari jawaban…');
-      const placeholder = chatEl.lastElementChild.querySelector('.bubble');
-
+      showTyping();
       sendBtn.disabled = true;
+
       try {
         const reply = await callGemini(parts);
-        placeholder.textContent = reply;
+        removeTyping();
+        addMessage('ai', reply);
         history.push({ role: "user", parts });
         history.push({ role: "model", parts: [{ text: reply }] });
       } catch (err) {
-        placeholder.textContent = "❌ Error: " + err.message;
+        removeTyping();
+        addMessage('ai', "❌ Error: " + err.message);
       } finally {
         sendBtn.disabled = false;
       }
@@ -254,7 +313,7 @@
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onSend(); }
     });
 
-    addMessage('ai', 'Halo 👋 Aku **BADZZ AI**. Mode Akurat aktif, jawabanku akan berusaha seperti hasil pencarian Google (faktual + ada sumber).');
+    addMessage('ai', 'Halo 👋 Aku **BADZZ AI**. Mode aktif, siap bantu kamu dengan jawaban faktual + sumber terpercaya.');
   </script>
 </body>
 </html>
